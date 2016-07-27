@@ -601,7 +601,7 @@ public final class RuntimeLong_v2 extends Runtime_v2
 	{
 		// p <= 0 is contrary to Excel's docs where it says p < 0; but the test case says otherwise.
 		if (_n < 0 || _p < 0 || _p > _cx.one || _alpha <= 0 || _alpha >= _cx.one) {
-			fun_ERROR( "#NUM! because not n >= 0, 0 <= p <= 1, 0 < alpha < 1 in CRITBINOM" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.not.n.0.0.p.1.0.alpha.1.in.critbinom") );
 		}
 		long n = fun_INT( _n, _cx );
 		long q = _cx.one - _p;
@@ -610,7 +610,7 @@ public final class RuntimeLong_v2 extends Runtime_v2
 		if (factor <= EPSILON) {
 			factor = fun_POWER( _p, n, _cx );
 			if (factor <= EPSILON) {
-				throw new FormulaException( "#NUM! because factor = 0 in CRITBINOM" );
+				throw new FormulaException(exceptionResourceBundle.getString("num.because.factor.0.in.critbinom") );
 			}
 			else {
 				long sum = _cx.one - factor;
@@ -883,7 +883,7 @@ public final class RuntimeLong_v2 extends Runtime_v2
 			return FACTORIALS[ a ];
 		}
 		else {
-			throw new ArithmeticException( "Overflow in FACT() using (scaled) long." );
+			throw new ArithmeticException(exceptionResourceBundle.getString("overflow.in.fact.using.scaled.long") );
 		}
 	}
 

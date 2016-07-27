@@ -23,6 +23,7 @@
 package org.formulacompiler.runtime.internal;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -878,7 +879,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 		if (factor == 0.0) {
 			factor = Math.pow( _probability, _trials );
 			if (factor == 0.0) {
-				throw new FormulaException( "#NUM! because both factors = 0 in binomialDensity" );
+				throw new FormulaException(exceptionResourceBundle.getString("num.because.both.factors.0.in.binomialdensity") );
 			}
 			else {
 				final int max = _trials - _successes;
@@ -1002,7 +1003,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_BETAINV( double _x, double _alpha, double _beta )
 	{
 		if (_x <= 0 || _x >= 1 || _alpha <= 0 || _beta <= 0) {
-			fun_ERROR( "#NUM! because not 0 < x < 1, alpha > 0, beta > 0 in BETAINV" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.not.0.x.1.alpha.0.beta.0.in.betainv") );
 		}
 		final BetaDistFunction func = new BetaDistFunction( _x, _alpha, _beta );
 		return iterateInverse( func, 0, 1 );
@@ -1011,7 +1012,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_CHIDIST( double _x, double _degFreedom )
 	{
 		if (_x < 0 || _degFreedom < 1) {
-			fun_ERROR( "#NUM! because x < 0 or degree < 1 in CHIDIST" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.x.0.or.degree.1.in.chidist") );
 		}
 
 		return Probability.chiSquareComplemented( Math.floor( _degFreedom ), _x );
@@ -1037,7 +1038,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_CHIINV( double _x, double _degFreedom )
 	{
 		if (_x <= 0 || _x > 1 || _degFreedom < 1 || _degFreedom > 10000000000.0) {
-			fun_ERROR( "#NUM! because not 0 < x <= 1, 1 <= degrees <= 10000000000 in CHIINV" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.not.0.x.1.1.degrees.10000000000.in.chiinv") );
 		}
 		ChiDistFunction func = new ChiDistFunction( _x, _degFreedom );
 		double res = iterateInverse( func, _degFreedom / 2, _degFreedom );
@@ -1053,7 +1054,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	{
 		// p <= 0 is contrary to Excel's docs where it says p < 0; but the test case says otherwise.
 		if (_n < 0 || _p < 0 || _p > 1 || _alpha <= 0 || _alpha >= 1) {
-			fun_ERROR( "#NUM! because not n >= 0, 0 <= p <= 1, 0 < alpha < 1 in CRITBINOM" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.not.n.0.0.p.1.0.alpha.1.in.critbinom") );
 		}
 		double n = Math.floor( _n );
 		double q = 1 - _p;
@@ -1061,7 +1062,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 		if (factor == 0) {
 			factor = Math.pow( _p, n );
 			if (factor == 0) {
-				throw new FormulaException( "#NUM! because factor = 0 in CRITBINOM" );
+				throw new FormulaException(exceptionResourceBundle.getString("num.because.factor.0.in.critbinom") );
 			}
 			else {
 				double sum = 1 - factor;
@@ -1114,7 +1115,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_FINV( double _p, double _f1, double _f2 )
 	{
 		if (_p < 0 || _f1 < 1 || _f2 < 1 || _f1 >= 1.0E10 || _f2 >= 1.0E10 || _p > 1) {
-			fun_ERROR( "#NUM! because p < 0 or not 1 <= f{1,2} < 1e10  in CHIINV" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.p.0.or.not.1.f.1.2.1e10.in.chiinv.regexp") );
 		}
 		if (_p == 0) {
 			return 1000000000;
@@ -1147,7 +1148,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_GAMMAINV( double _p, double _alpha, double _beta )
 	{
 		if (_p < 0 || _p > 1 || _alpha <= 0 || _beta <= 0) {
-			fun_ERROR( "#NUM! because not 0 <= p <= 1, alpha > 0, beta >0 in GAMMAINV" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.not.0.p.1.alpha.0.beta.0.in.gammainv") );
 		}
 		if (_p == 0) {
 			return 0; // This is a correct result, not an error.
@@ -1163,7 +1164,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	{
 		double x = _x;
 		if (x <= 0) {
-			fun_ERROR( "#NUM! because x <= 0 in GAMMALN" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.x.0.in.gammaln") );
 		}
 		boolean bReflect;
 		double[] c = { 76.18009173, -86.50532033, 24.01409822, -1.231739516, 0.120858003E-2, -0.536382E-5 };
@@ -1190,7 +1191,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_GAMMADIST( double _x, double _alpha, double _beta, boolean _cumulative )
 	{
 		if (_x < 0 || _alpha <= 0 || _beta <= 0) {
-			fun_ERROR( "#NUM! because x < 0 or alpha <= 0 or beta <= 0 in GAMMADIST" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.x.0.or.alpha.0.or.beta.0.in.gammadist") );
 		}
 
 		if (_cumulative) {
@@ -1214,7 +1215,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_POISSON( int _x, double _mean, boolean _cumulative )
 	{
 		if (_x < 0 || _mean < 0) {
-			fun_ERROR( "#NUM! because x < 0 or mean < 0 in POISSON" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.x.0.or.mean.0.in.poisson") );
 		}
 
 		if (_cumulative) {
@@ -1238,7 +1239,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_TDIST( double _x, double _degFreedom, int _tails, boolean no_floor )
 	{
 		if (_x < 0 || _degFreedom < 1 || (_tails != 1 && _tails != 2)) {
-			fun_ERROR( "#NUM! because x < 0 or degrees < 1 or not tails in {1, 2} in TDIST" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.x.0.or.degrees.1.or.not.tails.in.1.2.in.tdist.regexp") );
 		}
 
 		if (no_floor) {
@@ -1274,7 +1275,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_TINV( double _x, double _degFreedom )
 	{
 		if (_degFreedom < 1 || _degFreedom >= 1.0E5 || _x < 0 || _x > 1) {
-			fun_ERROR( "#NUM! because not 0 <= x <= 1, 1 <= degrees < 1e5 in TINV" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.not.0.x.1.1.degrees.1e5.in.tinv") );
 		}
 		StatisticDistFunc func = new TDistFunction( _x, _degFreedom );
 		return iterateInverse( func, _degFreedom / 2, _degFreedom );
@@ -1283,7 +1284,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 	public static double fun_WEIBULL( double _x, double _alpha, double _beta, boolean _cumulative )
 	{
 		if (_x < 0 || _alpha <= 0 || _beta <= 0) {
-			fun_ERROR( "#NUM! because x < 0 or alpha <= 0 or beta <= 0 in WEIBULL" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.x.0.or.alpha.0.or.beta.0.in.weibull") );
 		}
 
 		if (_cumulative) {
@@ -1385,7 +1386,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 			}
 			x = new_x;
 		}
-		throw new FormulaException( "#NUM! because result not found in " + MAX_ITER + " tries in IRR" );
+		throw new FormulaException(MessageFormat.format(exceptionResourceBundle.getString("num.because.result.not.found.in.0.tries.in.irr"), MAX_ITER) );
 	}
 
 	private static double xirrResultingAmount( double[] _values, int[] dates, double rate )
@@ -1421,13 +1422,13 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 			dates[ i ] = (int) _dates[ i ];
 		}
 		if (_values.length != dates.length) {
-			fun_ERROR( "#NUM! because values and dates array sizes are different in XIRR" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.values.and.dates.array.sizes.are.different.in.xirr") );
 		}
 		if (_values.length < 2) {
-			fun_ERROR( "#N/A! because values and dates array are too short in XIRR" );
+			fun_ERROR(exceptionResourceBundle.getString("n.a.because.values.and.dates.array.are.too.short.in.xirr") );
 		}
 		if (Math.abs( _guess ) >= 1) {
-			fun_ERROR( "#NUM! incorrect guess value in XIRR" );
+			fun_ERROR(exceptionResourceBundle.getString("num.incorrect.guess.value.in.xirr") );
 		}
 		boolean negativeValue = false;
 		boolean positiveValue = false;
@@ -1436,7 +1437,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 			if (value > 0) positiveValue = true;
 		}
 		if (!(negativeValue && positiveValue)) {
-			fun_ERROR( "#NUM! XIRR function expects at least one positive and one negative cash flow" );
+			fun_ERROR(exceptionResourceBundle.getString("num.xirr.function.expects.at.least.one.positive.and.one.negative.cash.flow") );
 		}
 
 		double resultRate = _guess;
@@ -1451,7 +1452,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 		}
 		while (continuousFlag && (++iter < MAX_ITER));
 		if (continuousFlag) {
-			throw new FormulaException( "#NUM! because result not found in " + MAX_ITER + " tries in XIRR" );
+			throw new FormulaException(MessageFormat.format(exceptionResourceBundle.getString("num.because.result.not.found.in.0.tries.in.xirr"), MAX_ITER) );
 		}
 		return resultRate;
 	}
@@ -1536,8 +1537,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 			rate0 = rate1;
 		}
 		if (eps >= EXCEL_EPSILON) {
-			fun_ERROR( "#NUM! because of result do not converge to within "
-					+ EXCEL_EPSILON + " after " + MAX_ITER + " iterations in RATE" );
+			fun_ERROR(MessageFormat.format(exceptionResourceBundle.getString("num.because.of.result.do.not.converge.to.within.0.after.1.iterations.in.rate"), EXCEL_EPSILON, MAX_ITER) );
 		}
 		return rate0;
 	}
@@ -1668,7 +1668,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 			return Math.floor( date );
 		}
 		catch (ParseException e) {
-			throw new FormulaException( "#VALUE! because argument could not be interpreted properly in DATEVALUE" );
+			throw new FormulaException(exceptionResourceBundle.getString("value.because.argument.could.not.be.interpreted.properly.in.datevalue") );
 		}
 	}
 
@@ -1689,7 +1689,7 @@ public final class RuntimeDouble_v2 extends Runtime_v2
 			return dataTime - Math.floor( dataTime );
 		}
 		catch (ParseException e) {
-			throw new FormulaException( "#VALUE! because argument could not be interpreted properly in TIMEVALUE" );
+			throw new FormulaException(exceptionResourceBundle.getString("value.because.argument.could.not.be.interpreted.properly.in.timevalue") );
 		}
 	}
 

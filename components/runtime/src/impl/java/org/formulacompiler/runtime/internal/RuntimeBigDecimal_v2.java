@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.Date;
+import java.text.MessageFormat;import java.util.Date;
 import java.util.TimeZone;
 
 import org.formulacompiler.runtime.ComputationMode;
@@ -407,19 +407,19 @@ public abstract class RuntimeBigDecimal_v2 extends Runtime_v2
 		// p <= 0 is contrary to Excel's docs where it says p < 0; but the test case says otherwise.
 		if (_n.signum() < 0 || _p.signum() < 0 || _p.compareTo( ONE ) > 0
 				|| _alpha.signum() <= 0 || _alpha.compareTo( ONE ) >= 0) {
-			fun_ERROR( "#NUM! because not n >= 0, 0 <= p <= 1, 0 < alpha < 1 in CRITBINOM" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.not.n.0.0.p.1.0.alpha.1.in.critbinom") );
 		}
 		BigDecimal q = ONE.subtract( _p );
 		final BigDecimal EPSILON = BigDecimal.valueOf( 0.1E-320 );
 		int n = _n.intValue();
 		if (n > 999999999) {
-			throw new FormulaException( "#NUM! because n value is too large in CRITBINOM" );
+			throw new FormulaException(exceptionResourceBundle.getString("num.because.n.value.is.too.large.in.critbinom") );
 		}
 		BigDecimal factor = q.pow( n );
 		if (factor.compareTo( EPSILON ) <= 0) {
 			factor = _p.pow( n );
 			if (factor.compareTo( EPSILON ) <= 0) {
-				throw new FormulaException( "#NUM! because factor = 0 in CRITBINOM" );
+				throw new FormulaException(exceptionResourceBundle.getString("num.because.factor.0.in.critbinom") );
 			}
 			else {
 				BigDecimal sum = ONE.subtract( factor );
@@ -776,7 +776,7 @@ public abstract class RuntimeBigDecimal_v2 extends Runtime_v2
 			x = new_x;
 
 		}
-		throw new FormulaException( "#NUM! because result not found in " + EXCEL_MAX_ITER + " tries in IRR" );
+		throw new FormulaException(MessageFormat.format(exceptionResourceBundle.getString("num.because.result.not.found.in.0.tries.in.irr"), EXCEL_MAX_ITER) );
 	}
 
 	private static BigDecimal xirrResultingAmount( BigDecimal[] _values, BigDecimal[] dates, BigDecimal rate, MathContext _cx )
@@ -813,13 +813,13 @@ public abstract class RuntimeBigDecimal_v2 extends Runtime_v2
 			dates[ i ] = _dates[ i ].setScale( 0, RoundingMode.DOWN );
 		}
 		if (_values.length != dates.length) {
-			fun_ERROR( "#NUM! because values and dates array sizes are different in XIRR" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.values.and.dates.array.sizes.are.different.in.xirr") );
 		}
 		if (_values.length < 2) {
-			fun_ERROR( "#N/A! because values and dates array are too short in XIRR" );
+			fun_ERROR(exceptionResourceBundle.getString("n.a.because.values.and.dates.array.are.too.short.in.xirr") );
 		}
 		if ((_guess.abs( _cx ).compareTo( BigDecimal.ONE ) >= 0)) {
-			fun_ERROR( "#NUM! incorrect guess value in XIRR" );
+			fun_ERROR(exceptionResourceBundle.getString("num.incorrect.guess.value.in.xirr") );
 		}
 		boolean negativeValue = false;
 		boolean positiveValue = false;
@@ -829,7 +829,7 @@ public abstract class RuntimeBigDecimal_v2 extends Runtime_v2
 			if (valueSign > 0) positiveValue = true;
 		}
 		if (!(negativeValue && positiveValue)) {
-			fun_ERROR( "#NUM! there are no positive or negative cash flow values in XIRR" );
+			fun_ERROR(exceptionResourceBundle.getString("num.there.are.no.positive.or.negative.cash.flow.values.in.xirr") );
 		}
 
 		BigDecimal resultRate = _guess;
@@ -844,7 +844,7 @@ public abstract class RuntimeBigDecimal_v2 extends Runtime_v2
 		}
 		while (continuousFlag && (++iter < MAX_ITER));
 		if (continuousFlag) {
-			throw new FormulaException( "#NUM! because result not found in " + MAX_ITER + " tries in XIRR" );
+			throw new FormulaException(MessageFormat.format(exceptionResourceBundle.getString("num.because.result.not.found.in.0.tries.in.xirr"), MAX_ITER) );
 		}
 		return resultRate;
 	}
@@ -906,7 +906,7 @@ public abstract class RuntimeBigDecimal_v2 extends Runtime_v2
 		if (_start_period.compareTo( ZERO ) < 0
 				|| _end_period.compareTo( _life ) > 0 || _cost.compareTo( ZERO ) < 0
 				|| _end_period.compareTo( _start_period ) < 0 || _factor.compareTo( BigDecimal.valueOf( 0 ) ) < 0) {
-			fun_ERROR( "#NUM! because of illegal argument values in VDB" );
+			fun_ERROR(exceptionResourceBundle.getString("num.because.of.illegal.argument.values.in.vdb") );
 		}
 		else {
 			if (_salvage.compareTo( _cost ) > 0) {
@@ -1017,8 +1017,7 @@ public abstract class RuntimeBigDecimal_v2 extends Runtime_v2
 			rate0 = rate1;
 		}
 		if (eps.compareTo( EXCEL_EPSILON ) >= 0) {
-			fun_ERROR( "#NUM! because of result do not converge to within "
-					+ EXCEL_EPSILON + " after " + MAX_ITER + " iterations in RATE" );
+			fun_ERROR(MessageFormat.format(exceptionResourceBundle.getString("num.because.of.result.do.not.converge.to.within.0.after.1.iterations.in.rate"), EXCEL_EPSILON, MAX_ITER) );
 		}
 		return rate0;
 	}

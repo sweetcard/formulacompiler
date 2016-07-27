@@ -59,7 +59,7 @@ import org.formulacompiler.runtime.NotAvailableException;
  */
 public abstract class Runtime_v2
 {
-	private static final ResourceBundle exceptionResourceBundle =
+	protected static final ResourceBundle exceptionResourceBundle =
 			ResourceBundle.getBundle("Exception",Locale.CHINA);
 
 	public static final int BROKEN_REF = -1;
