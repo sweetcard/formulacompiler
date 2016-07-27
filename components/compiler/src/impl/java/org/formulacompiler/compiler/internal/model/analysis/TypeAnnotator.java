@@ -252,6 +252,15 @@ public final class TypeAnnotator extends AbstractComputationModelVisitor
 					return DataType.NULL;
 				}
 
+			//注意: 增加VLOOKUP
+			//TODO: VLOOKUP需要使用返回列的数据类型
+//			case VLOOKUP:
+//				if (_expr.arguments().size() >= 1) {
+//					return _expr.arguments().get( 0 ).getDataType();
+//				}else {
+//					unsupported( _expr );
+//					return DataType.NULL;
+//				}
 			case INDEX:
 				if (_expr.arguments().size() >= 1) {
 					return _expr.arguments().get( 0 ).getDataType();
@@ -437,6 +446,7 @@ public final class TypeAnnotator extends AbstractComputationModelVisitor
 		for (ExpressionNode arg : _args) {
 			final DataType type = arg.getDataType();
 			if (type != null) {
+				//注意: 忽略类型转换
 				if (refType != type) {
 					throw new CompilerException.DataTypeError( "Arguments of expression " + _parent
 							+ " must have the same type."

@@ -129,6 +129,7 @@ final public class ConstantSubExpressionEliminator extends AbstractComputationMo
 		if (null != sourceExpr) {
 			try {
 				final TypedResult optimizedResult = eliminateConstantsFrom( sourceExpr, _cell );
+				//注意: 忽略类型转换
 				assert (optimizedResult.getDataType() == _cell.getDataType() || optimizedResult.getDataType() == DataType.NULL);
 				if (optimizedResult.hasConstantValue()) {
 					_cell.setExpression( null );

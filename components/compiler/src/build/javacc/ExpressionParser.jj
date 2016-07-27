@@ -1196,9 +1196,15 @@ TOKEN:
 	|	<RIGHT_BRACKET: "]"> : DEFAULT
 	}
 
+//ALERT: patched by Flymonk AT 16/4/8 10:46: to support unicode characters in sheet names
+//
+//TOKEN: /* Names */
+//	{	<NAME: (<ALPHA> | "_") (<ALPHA> | "_" | "." | ["0"-"9"])* >
+//	}
+
 
 TOKEN: /* Names */
-	{	<NAME: (<ALPHA> | "_") (<ALPHA> | "_" | "." | ["0"-"9"])* >
+	{	<NAME: (<LETTER> | "_") (<LETTER> | "_" | "." | ["0"-"9"])* >
 	}
 
 TOKEN: /* Separators */

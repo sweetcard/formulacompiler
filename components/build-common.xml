@@ -223,10 +223,10 @@
 	</target>
 	
 	<target name="@hgrev" depends="@init">
-		<exec executable="hg" dir="${basedir}" outputproperty="hgrev" failifexecutionfails="false">
-			<arg value="id" />
-			<arg value="-i" />
-		</exec>
+		<!--<exec executable="hg" dir="${basedir}" outputproperty="hgrev" failifexecutionfails="false">-->
+			<!--<arg value="id" />-->
+			<!--<arg value="-i" />-->
+		<!--</exec>-->
 	</target>
 
 	<!-- test -->

@@ -31,15 +31,18 @@ import java.text.Collator;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +59,8 @@ import org.formulacompiler.runtime.NotAvailableException;
  */
 public abstract class Runtime_v2
 {
+	private static final ResourceBundle exceptionResourceBundle =
+			ResourceBundle.getBundle("Exception",Locale.CHINA);
 
 	public static final int BROKEN_REF = -1;
 
@@ -75,8 +80,8 @@ public abstract class Runtime_v2
 
 	public static double checkDouble( final double _value )
 	{
-		if (Double.isNaN( _value )) throw new FormulaException( "#NUM! (value is NaN)" );
-		if (Double.isInfinite( _value )) throw new FormulaException( "#NUM! (value is infinite)" );
+		if (Double.isNaN( _value )) throw new FormulaException(exceptionResourceBundle.getString("num.value.is.nan") );
+		if (Double.isInfinite( _value )) throw new FormulaException(exceptionResourceBundle.getString("num.value.is.infinite") );
 		return _value;
 	}
 
@@ -230,7 +235,7 @@ public abstract class Runtime_v2
 			return number;
 		}
 		else {
-			throw new FormulaException( "#VALUE! because " + _text + " is not a number" );
+			throw new FormulaException(MessageFormat.format(exceptionResourceBundle.getString("value.because.0.is.not.a.number"), _text) );
 		}
 	}
 
@@ -258,12 +263,12 @@ public abstract class Runtime_v2
 
 				public Date visitTime( final long _ms )
 				{
-					throw new FormulaException( "Cannot convert a string to date" );
+					throw new FormulaException(exceptionResourceBundle.getString("cannot.convert.a.string.to.date") );
 				}
 			} );
 		}
 		catch (ParseException e) {
-			throw new FormulaException( "Cannot convert a string to date" );
+			throw new FormulaException(exceptionResourceBundle.getString("cannot.convert.a.string.to.date") );
 		}
 	}
 
@@ -523,33 +528,33 @@ public abstract class Runtime_v2
 
 	protected static void err_CEILING()
 	{
-		fun_ERROR( "#NUM! because signum of args not equal in CEILING" );
+		fun_ERROR(exceptionResourceBundle.getString("num.because.signum.of.args.not.equal.in.ceiling") );
 	}
 
 	protected static void err_FLOOR()
 	{
-		fun_ERROR( "#NUM! because signum of args not equal in FLOOR" );
+		fun_ERROR(exceptionResourceBundle.getString("num.because.signum.of.args.not.equal.in.floor") );
 	}
 
 	protected static void err_FACT()
 	{
-		fun_ERROR( "#NUM! because n < 0 in FACT" );
+		fun_ERROR(exceptionResourceBundle.getString("num.because.n.0.in.fact") );
 	}
 
 
 	public static String fun_MID( String _s, int _start, int _len )
 	{
 		final int start = _start - 1;
-		if (start < 0) fun_ERROR( "#VALUE! because start < 0 in MID" );
+		if (start < 0) fun_ERROR(exceptionResourceBundle.getString("value.because.start.0.in.mid") );
 		if (start >= _s.length()) return "";
-		if (_len < 0) fun_ERROR( "#VALUE! because len < 0 in MID" );
+		if (_len < 0) fun_ERROR(exceptionResourceBundle.getString("value.because.len.0.in.mid") );
 		final int pastEnd = (start + _len >= _s.length()) ? _s.length() : start + _len;
 		return _s.substring( start, pastEnd );
 	}
 
 	public static String fun_LEFT( String _s, int _len )
 	{
-		if (_len < 0) fun_ERROR( "#VALUE! because len < 0 in LEFT" );
+		if (_len < 0) fun_ERROR(exceptionResourceBundle.getString("value.because.len.0.in.left") );
 		if (_len == 0) return "";
 		if (_len >= _s.length()) return _s;
 		return _s.substring( 0, _len );
@@ -557,7 +562,7 @@ public abstract class Runtime_v2
 
 	public static String fun_RIGHT( String _s, int _len )
 	{
-		if (_len < 0) fun_ERROR( "#VALUE! because len < 0 in RIGHT" );
+		if (_len < 0) fun_ERROR(exceptionResourceBundle.getString("value.because.len.0.in.right") );
 		if (_len == 0) return "";
 		if (_len >= _s.length()) return _s;
 		final int max = _s.length();
@@ -575,7 +580,7 @@ public abstract class Runtime_v2
 
 	public static String fun_SUBSTITUTE( String _s, String _src, String _tgt, int _occurrence )
 	{
-		if (_occurrence <= 0) fun_ERROR( "#VALUE! because occurrence <= 0 in SUBSTITUTE" );
+		if (_occurrence <= 0) fun_ERROR(exceptionResourceBundle.getString("value.because.occurrence.0.in.substitute") );
 		if (_s == null || _s.equals( "" )) return _s;
 		if (_src == null || _src.equals( "" ) || _src.equals( _tgt )) return _s;
 		int at = 0;
@@ -593,8 +598,8 @@ public abstract class Runtime_v2
 
 	public static String fun_REPLACE( String _s, int _at, int _len, String _repl )
 	{
-		if (_at < 1) fun_ERROR( "#VALUE! because at <= 0 in REPLACE" );
-		if (_len < 0) fun_ERROR( "#VALUE! because len < 0 in REPLACE" );
+		if (_at < 1) fun_ERROR(exceptionResourceBundle.getString("value.because.at.0.in.replace") );
+		if (_len < 0) fun_ERROR(exceptionResourceBundle.getString("value.because.len.0.in.replace") );
 		if (_s == null || _s.equals( "" )) return _repl;
 		final int at = _at - 1;
 		if (at >= _s.length()) return _s + _repl;
@@ -610,18 +615,18 @@ public abstract class Runtime_v2
 	public static int fun_FIND( String _what, String _within, int _startingAt )
 	{
 		if (_what == null || _what.equals( "" )) return 1;
-		if (_within == null || _within.equals( "" )) fun_ERROR( "#VALUE! because no result in FIND" );
-		if (_startingAt > _within.length()) fun_ERROR( "#VALUE! because start is past end in SEARCH" );
+		if (_within == null || _within.equals( "" )) fun_ERROR(exceptionResourceBundle.getString("value.because.no.result.in.find") );
+		if (_startingAt > _within.length()) fun_ERROR(exceptionResourceBundle.getString("value.because.start.is.past.end.in.search") );
 		final int ix = _within.indexOf( _what, _startingAt - 1 );
-		if (ix < 0) fun_ERROR( "#VALUE! because no result in FIND" );
+		if (ix < 0) fun_ERROR(exceptionResourceBundle.getString("value.because.no.result.in.find") );
 		return ix + 1;
 	}
 
 	public static int fun_SEARCH( String _what, String _within, int _startingAt )
 	{
-		if (_within == null || _within.equals( "" )) fun_ERROR( "#VALUE! because no result in SEARCH" );
+		if (_within == null || _within.equals( "" )) fun_ERROR(exceptionResourceBundle.getString("value.because.no.result.in.search") );
 		if (_what == null || _what.equals( "" )) return 1;
-		if (_startingAt > _within.length()) fun_ERROR( "#VALUE! because start is past end in SEARCH" );
+		if (_startingAt > _within.length()) fun_ERROR(exceptionResourceBundle.getString("value.because.start.is.past.end.in.search") );
 
 		final Pattern pattern = patternFor( _what.toLowerCase() );
 		final Matcher matcher = pattern.matcher( _within.toLowerCase() );
@@ -629,7 +634,7 @@ public abstract class Runtime_v2
 			return matcher.start() + 1;
 		}
 		else {
-			throw new FormulaException( "#VALUE! because no result in FIND" );
+			throw new FormulaException(exceptionResourceBundle.getString("value.because.no.result.in.find") );
 		}
 	}
 
@@ -709,7 +714,7 @@ public abstract class Runtime_v2
 			}
 		}
 		else {
-			throw new FormulaException( "#VALUE! because no data in CODE" );
+			throw new FormulaException(exceptionResourceBundle.getString("value.because.no.data.in.code") );
 		}
 	}
 
@@ -723,10 +728,10 @@ public abstract class Runtime_v2
 				return String.valueOf( cb.get() );
 			}
 			else {
-				throw new FormulaException( "#VALUE! because wrong symbol code in CHAR" );
+				throw new FormulaException(exceptionResourceBundle.getString("value.because.wrong.symbol.code.in.char") );
 			}
 		}
-		throw new FormulaException( "#VALUE! because illegal argument (num <= 0 or num >= 256) in CHAR" );
+		throw new FormulaException(exceptionResourceBundle.getString("value.because.illegal.argument.num.0.or.num.256.in.char") );
 	}
 
 	public static String fun_FIXED( Number _number, int _decimals, boolean _no_commas, Environment _environment )
@@ -823,10 +828,10 @@ public abstract class Runtime_v2
 	public static String fun_ROMAN( int _val, int _mode )
 	{
 		if (_mode < 0 || _mode > 4) {
-			fun_ERROR( "#VALUE! because mode out of range in ROMAN" );
+			fun_ERROR(exceptionResourceBundle.getString("value.because.mode.out.of.range.in.roman") );
 		}
 		if (_val < 0 || _val >= 4000) {
-			fun_ERROR( "#VALUE! because value out of range in ROMAN" );
+			fun_ERROR(exceptionResourceBundle.getString("value.because.value.out.of.range.in.roman") );
 		}
 		final StringBuilder result = new StringBuilder();
 		final int[] values = { 1000, 500, 100, 50, 10, 5, 1 };
@@ -896,7 +901,7 @@ public abstract class Runtime_v2
 		if ("@".equals( _format )) {
 			return stringFromNumber( _num, _environment );
 		}
-		throw new IllegalArgumentException( "TEXT() is not properly supported yet." );
+		throw new IllegalArgumentException(exceptionResourceBundle.getString("text.is.not.properly.supported.yet") );
 	}
 
 	public static String fun_ADDRESS( int _row, int _column, int _absRelType, boolean _a1Style, String _sheet, ComputationMode _mode )
@@ -906,13 +911,13 @@ public abstract class Runtime_v2
 			absRelType -= 4;
 		}
 		if (absRelType < 1 || absRelType > 4) {
-			fun_ERROR( "#VALUE! type of reference has incorrect value in ADDRESS" );
+			fun_ERROR(exceptionResourceBundle.getString("value.type.of.reference.has.incorrect.value.in.address") );
 		}
 		final boolean columnIndexAbsolute = (absRelType == 1) || (absRelType == 3);
 		final boolean rowIndexAbsolute = (absRelType == 1) || (absRelType == 2);
 
 		if ((_row < 1 && (rowIndexAbsolute || _a1Style)) || (_column < 1 && (columnIndexAbsolute || _a1Style))) {
-			fun_ERROR( "#VALUE! incorrect column or row number in ADDRESS" );
+			fun_ERROR(exceptionResourceBundle.getString("value.incorrect.column.or.row.number.in.address") );
 		}
 
 		final StringBuilder address = new StringBuilder();
@@ -1022,8 +1027,8 @@ public abstract class Runtime_v2
 				if (0 == _x.compareToIgnoreCase( _xs[ i ] )) return i + 1; // Excel is 1-based
 			}
 		}
-		throw new NotAvailableException();
-	}
+        throw new NotAvailableException(MessageFormat.format(exceptionResourceBundle.getString("can.t.match.string.0.in.array.1"), _x, Arrays.toString(_xs)));
+    }
 
 	public static int fun_MATCH_Ascending( final String _x, String[] _xs, Environment _env )
 	{

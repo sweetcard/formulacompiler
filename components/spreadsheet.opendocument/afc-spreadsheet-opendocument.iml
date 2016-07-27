@@ -9,7 +9,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/impl/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/.settings" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/lib" />
       <excludeFolder url="file://$MODULE_DIR$/temp/impl/classes" />
       <excludeFolder url="file://$MODULE_DIR$/temp/test/classes" />
     </content>
@@ -59,4 +61,3 @@
     <orderEntry type="library" name="xmlunit" level="project" />
   </component>
 </module>
-

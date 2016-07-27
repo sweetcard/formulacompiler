@@ -23,36 +23,41 @@
 package org.formulacompiler.runtime;
 
 
+import java.util.ResourceBundle;
+
 /**
  * Base class of runtime exceptions thrown by compiled computations for error conditions. The
  * spreadsheet function {@code ISERROR()} traps this error.
- * 
+ *
  * @author peo
- * 
  * @see FormulaException
  * @see NotAvailableException
  */
-public class ComputationException extends RuntimeException
-{
+public class ComputationException extends RuntimeException {
 
-	public ComputationException()
-	{
-		super();
-	}
+    public ComputationException() {
+        super();
+    }
 
-	public ComputationException( String _message, Throwable _cause )
-	{
-		super( _message, _cause );
-	}
+    public ComputationException(String _message, Throwable _cause) {
+        super(_message, _cause);
+    }
 
-	public ComputationException( String _message )
-	{
-		super( _message );
-	}
+    public ComputationException(String _message) {
+        super(_message);
+    }
 
-	public ComputationException( Throwable _cause )
-	{
-		super( _cause );
-	}
+    public ComputationException(Throwable _cause) {
+        super(_cause);
+    }
+
+
+    @Override
+    public String getLocalizedMessage() {
+        String message = getMessage();
+        //≤È’“i18n message
+        String i18nMessage = ResourceBundle.getBundle("Exception").getString(message);
+        return i18nMessage != null ? i18nMessage : super.getLocalizedMessage();
+    }
 
 }

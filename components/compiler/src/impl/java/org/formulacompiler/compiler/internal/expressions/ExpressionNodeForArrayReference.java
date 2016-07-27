@@ -103,6 +103,7 @@ public final class ExpressionNodeForArrayReference extends ExpressionNode
 		final ArrayDescriptor subDesc = new ArrayDescriptor( myDesc, _firstRowDelta, _firstColDelta,
 				_nRows - myDesc.extent().row(), _nCols - myDesc.extent().col() );
 		final ExpressionNodeForArrayReference sub = new ExpressionNodeForArrayReference( subDesc );
+		//ALERT: 在取子数组时,应以子数组元素的类型为类型
 		sub.setDataType( getDataType() );
 		sub.setDeclaredDataType( getDeclaredDataType() );
 		sub.setDerivedFrom( getDerivedFrom() );
@@ -114,6 +115,8 @@ public final class ExpressionNodeForArrayReference extends ExpressionNode
 				final ExpressionNode val = vals.next();
 				if (_firstColDelta <= iCol && iCol <= lastCol) {
 					sub.addArgument( val );
+					//ALERT: 在取子数组时,应以子数组元素的类型为类型
+//					sub.setDataType(val.getDataType());
 				}
 			}
 		}

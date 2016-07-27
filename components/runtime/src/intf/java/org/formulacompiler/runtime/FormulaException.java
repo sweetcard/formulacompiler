@@ -27,32 +27,26 @@ package org.formulacompiler.runtime;
  * Runtime exception thrown by compiled computations for conditions normally flagged as
  * {@code #VALUE!}, {@code #NUM!}, or {@code #DIV/0!}. The spreadsheet functions {@code ISERR()}
  * and {@code ISERROR()} both trap this error.
- * 
+ *
  * @author peo
- * 
  * @see NotAvailableException
  */
-public class FormulaException extends ComputationException
-{
+public class FormulaException extends ComputationException {
 
-	public FormulaException()
-	{
-		super();
-	}
+    public FormulaException() {
+        super();
+    }
 
-	public FormulaException( String _message, Throwable _cause )
-	{
-		super( _message, _cause );
-	}
+    public FormulaException(String _message, Throwable _cause) {
+        super(_message, _cause);
+    }
 
-	public FormulaException( String _message )
-	{
-		super( _message );
-	}
+    public FormulaException(String _message) {
+        super(_message);
+    }
 
-	public FormulaException( Throwable _cause )
-	{
-		super( _cause );
-	}
+    public FormulaException(Throwable _cause) {
+        super(_cause);
+    }
 
 }

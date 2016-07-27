@@ -139,10 +139,14 @@ public final class ExcelXLSLoader implements SpreadsheetLoader
 		final int numberOfNames = _xlsWorkbook.getNumberOfNames();
 		for (int nameIndex = 0; nameIndex < numberOfNames; nameIndex++) {
 			final Name name = _xlsWorkbook.getNameAt( nameIndex );
-			if (name.isFunctionName()) continue;
+			//ALERT: patched by Flymonk. Add checking whether name is valid
+			//TODO: 将发现的未知的cell name提示给用户
+			if (name.isFunctionName() && !isValidNamedRegion(name)) continue;
 
 			final String cellRangeAddress = name.getRefersToFormula();
 			final String rangeName = name.getNameName();
+
+			if (cellRangeAddress==null) continue;
 
 			final ExpressionParser parser = new SpreadsheetExpressionParserA1OOXML( cellRangeAddress, _spreadsheet );
 			try {
@@ -151,8 +155,22 @@ public final class ExcelXLSLoader implements SpreadsheetLoader
 			}
 			catch (ParseException e) {
 				// Ignore all non 'named range' names
+				//TODO: only for debug
+				e.printStackTrace();
 			}
 		}
+	}
+
+	private boolean isValidNamedRegion(Name region) {
+		return !region.isDeleted() && hasValidWorkSheet(region);
+	}
+
+	private boolean hasValidWorkSheet(Name region) {
+		String sheetName = null;
+		try {
+			sheetName = region.getSheetName();
+		} catch(Exception e) {}
+		return (sheetName != null && !"".equals(sheetName));
 	}
 
 	private Cell getCellByName( String _name, Workbook _workbook, BaseSpreadsheet _spreadsheet )

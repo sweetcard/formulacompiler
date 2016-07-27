@@ -30,7 +30,9 @@ import static org.formulacompiler.runtime.internal.Runtime_v2.BROKEN_REF;
 public abstract class CellRefParser
 {
 	private static final String BROKEN_REF_ERR = "#REF!";
-	private static final String SHEET_NAME_REGEXP = "(?:(\\w+)|'((?:''|[^'])+)')";
+//	private static final String SHEET_NAME_REGEXP = "(?:(\\w+)|'((?:''|[^'])+)')";
+	//ALERT: Modified by Flymonk AT 16/4/8 11:17: Add Chinese sheet name support
+	private static final String SHEET_NAME_REGEXP = "(?:([a-zA-Z_0-9\\u4E00-\\u9FA5]+)|'((?:''|[^'])+)')";
 	private static final String BROKEN_SHEET_NAME_REGEXP = "(?:(\\w+|" + BROKEN_REF_ERR + ")|'((?:''|[^'])+)')";
 
 	public static class R1C1
@@ -86,7 +88,9 @@ public abstract class CellRefParser
 
 	public static class A1
 	{
-		private static final String COL_REGEXP = "(\\$?)([A-Z]+)";
+		//ALERT: Modified by Flymonk AT 16/4/8 11:17: Add Chinese sheet name support
+//		private static final String COL_REGEXP = "(\\$?)([A-Z]+)";
+		private static final String COL_REGEXP = "(\\$?)([A-Z\\u4E00-\\u9FA5]+)";
 		private static final String ROW_REGEXP = "(\\$?)(\\d+)";
 		private static final String CELL_REGEXP = COL_REGEXP + ROW_REGEXP;
 
